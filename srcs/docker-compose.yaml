@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  nginx:
+    build: ./requirements/nginx/
+    # container_name: nginx
+    image: nginx
+    restart: unles-stopped
+    depends_on:
+      - wordpress
+    env_file:
+      - .env
+    volumes:
+      - wordpress:/var/www/html
+    ports:
+      - "443:443"
+    networks:
+      - inception
+  mariadb:
+
+
+
+
+
+
+
+
+
+networks:
+  inception:
+volumes:
+  wordpress:
