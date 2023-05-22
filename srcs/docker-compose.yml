@@ -1,26 +1,34 @@
 version: '3.8'
-
 services:
   mariadb:
     build: ./requirements/mariadb/
     image: mariadb
+    container_name: db
     restart: unless-stopped
     env_file:
       - .env
-    volumes:
-      -mariadb:/var/lib/mysql
+    pull_policy: never
+    # volumes:
+    #   - type: bind
+    #     source: ~/dbase_data
+    #     target: /var/lib/mysql
+    # -mariadb:/var/lib/mysql
     networks:
       - inception
   nginx:
     build: ./requirements/nginx/
     image: nginx
+    pull_policy: never
+    container_name: webserver
     restart: unless-stopped
     depends_on:
       - wordpress
     env_file:
       - .env
     volumes:
-      - wordpress:/var/www/html
+      - type: bind
+        source: ~/wordpress_files
+        target: /var/www/html
     ports:
       - "443:443"
     networks:
@@ -28,23 +36,27 @@ services:
   wordpress:
     build: ./requirements/wordpress/
     image: wordpress
+    pull_policy: never
+    container_name: cms
     restart: unless-stopped
     depends_on:
       - mariadb
     env_file:
       - .env
     volumes:
-      - wordpress:/var/www/html
+      - type: bind
+        source: ~/wordpress_files
+        target: /var/www/html
+      # - wordpress:/var/www/html
     networks:
       - inception
 networks:
   inception:
-volumes:
-  wordpress:
-    type: bind
-    source: ~/wordpress_files
-  mariadb:
-    type: bind
-    source: ~/dbase_data
-
-  
+# volumes:
+  # wordpress:
+    # type: bind
+    # source: ~/wordpress_files
+  # mariadb:
+    # type: bind
+    # source: ~/dbase_data
+ 
