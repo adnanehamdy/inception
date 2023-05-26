@@ -8,5 +8,7 @@
 #  RUN mv /etc/nginx/nginx.conf /etc/nginx/origin.conf
 
  COPY nginx.conf /etc/nginx/conf.d/nginx.conf
-
- CMD ["/usr/sbin/nginx", "-g", "daemon off;"]
+ COPY setup_nginx.sh /setup_nginx.sh
+ RUN chmod +x /setup_nginx.sh
+ CMD ["/setup_nginx.sh"]
+#  CMD ["/usr/sbin/nginx", "-g", "daemon off;"]

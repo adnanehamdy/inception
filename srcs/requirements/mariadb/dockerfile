@@ -4,7 +4,11 @@
  
  COPY ./setup_db.sh /
  RUN chmod +x /setup_db.sh
+ ARG DB_PASS=${DB_PASS}
+ ARG DB_NAME=${DB_NAME}
+ ARG DB_USER=${DB_USER}
  RUN sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mariadb.conf.d/50-server.cnf
-# RUN /setup_db.sh
+ RUN /setup_db.sh
 
- CMD ["/setup_db.sh"]
+CMD ["mysqld"]
+#  CMD ["/setup_db.sh"]
