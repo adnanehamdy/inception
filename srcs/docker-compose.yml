@@ -7,14 +7,15 @@ services:
         DB_PASS: ${DB_PASS}
         DB_NAME: ${DB_NAME}
         DB_USER: ${DB_USER}
+        DB_ROOT_PASS: ${DB_ROOT_PASS}
     image: mariadb
     container_name: mariadb
     restart: unless-stopped
     env_file:
       - .env
     pull_policy: never
-    # volumes: 
-    #   - /Users/ahamdy/db_vol:/var/lib/mysql
+    volumes: 
+      - db_vol:/var/lib/mysql
     networks:
       - inception
   nginx:
@@ -28,7 +29,7 @@ services:
     env_file:
       - .env
     volumes:
-      - /Users/ahamdy/wordpress_files:/var/www/html/
+      - /home/ahamdy/wordpress_vol:/var/www/html/
     ports:
       - "443:443"
     networks:
@@ -44,15 +45,16 @@ services:
     env_file:
       - .env
     volumes: 
-      - /Users/ahamdy/wordpress_files:/var/www/html/
+      - /home/ahamdy/wordpress_vol:/var/www/html/
     networks:
       - inception
 networks:
   inception:
-# volumes:
-#   db_vol:
-#     driver: local
-#     driver_opts:
-#       type: 'bind'
-#       o: 'bind'
-#       device: '/Users/ahamdy/goinfre/test'
+
+volumes:
+  db_vol:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/home/ahamdy/db_vol'
